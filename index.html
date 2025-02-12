@@ -68,11 +68,9 @@
             "林": "Роща",
             "森": "Лес",
             "雨": "Дождь",
-            "田": "Рисовое поле",
-            "雪": "Снег",
+            "田": "Поле",
             "雷": "Гром",
-            "電": "Электричество"
-        };
+                };
 
         function createCards() {
             const kanjiContainer = document.getElementById("kanji-container");
@@ -120,7 +118,7 @@
         }
 
         function triggerSnowfall(x, y) {
-            for (let i = 0; i < 20; i++) { // Increased snowflakes
+            for (let i = 0; i < 50; i++) { // Increased snowflakes
                 const snowflake = document.createElement("div");
                 snowflake.className = "snowflake";
                 snowflake.textContent = "❄";
