@@ -19,7 +19,8 @@
             font-size: 50px;
             font-weight: bold;
             padding: 20px;
-            background-color: white;
+            background-color: #ffb6c1;
+            color: #d40078;
             display: inline-block;
             border-radius: 10px;
             margin: 20px;
@@ -39,17 +40,15 @@
         .hidden {
             visibility: hidden;
         }
-        @keyframes fireworks {
-            0% { opacity: 1; transform: scale(0.5); }
-            100% { opacity: 0; transform: scale(3); }
+        @keyframes snowfall {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(50px); }
         }
-        .firework {
+        .snowflake {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: gold;
-            border-radius: 50%;
-            animation: fireworks 0.8s ease-out;
+            font-size: 20px;
+            color: #ffffff;
+            animation: snowfall 1s ease-out;
         }
     </style>
 </head>
@@ -67,7 +66,12 @@
             "休": "Отдых",
             "林": "Роща",
             "森": "Лес",
-            "本": "Книга"
+            "本": "Книга",
+            "雨": "Дождь",
+            "田": "Рисовое поле",
+            "雪": "Снег",
+            "雷": "Гром",
+            "電": "Электричество"
         };
 
         function createCards() {
@@ -105,18 +109,19 @@
             if (draggedKanji === correctKanji) {
                 event.target.classList.add("hidden");
                 document.querySelector(`.kanji-card:contains('${draggedKanji}')`).classList.add("hidden");
-                triggerFireworks(event.clientX, event.clientY);
+                triggerSnowfall(event.clientX, event.clientY);
             }
         }
 
-        function triggerFireworks(x, y) {
+        function triggerSnowfall(x, y) {
             for (let i = 0; i < 10; i++) {
-                const firework = document.createElement("div");
-                firework.className = "firework";
-                firework.style.left = `${x + (Math.random() * 50 - 25)}px`;
-                firework.style.top = `${y + (Math.random() * 50 - 25)}px`;
-                document.body.appendChild(firework);
-                setTimeout(() => firework.remove(), 800);
+                const snowflake = document.createElement("div");
+                snowflake.className = "snowflake";
+                snowflake.textContent = "❄";
+                snowflake.style.left = `${x + (Math.random() * 50 - 25)}px`;
+                snowflake.style.top = `${y + (Math.random() * 50 - 25)}px`;
+                document.body.appendChild(snowflake);
+                setTimeout(() => snowflake.remove(), 1000);
             }
         }
 
