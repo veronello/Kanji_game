@@ -8,10 +8,12 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f0f0f0;
+            background: linear-gradient(to right, #ffdde1, #ee9ca7, #c89ec4, #a29bfe);
+            color: #333;
+            overflow: hidden;
         }
         h1 {
-            color: #333;
+            color: #6a0572;
         }
         .kanji-card, .meaning-card {
             font-size: 50px;
@@ -23,6 +25,10 @@
             margin: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: grab;
+            transition: transform 0.2s;
+        }
+        .kanji-card:hover, .meaning-card:hover {
+            transform: scale(1.1);
         }
         .container {
             display: flex;
@@ -32,6 +38,18 @@
         }
         .hidden {
             visibility: hidden;
+        }
+        @keyframes fireworks {
+            0% { opacity: 1; transform: scale(0.5); }
+            100% { opacity: 0; transform: scale(3); }
+        }
+        .firework {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: gold;
+            border-radius: 50%;
+            animation: fireworks 0.8s ease-out;
         }
     </style>
 </head>
@@ -44,23 +62,12 @@
 
     <script>
         const kanjiDict = {
-            "白": "Белый",
-            "黒": "Чёрный",
-            "赤": "Красный",
-            "青": "Синий",
-            "黄": "Жёлтый",
-            "紫": "Фиолетовый",
-            "月": "Луна",
-            "火": "Огонь",
-            "水": "Вода",
-            "木": "Дерево",
-            "金": "Золото",
-            "土": "Земля",
-            "日": "Солнце",
             "人": "Человек",
-            "子": "Ребёнок",
-            "池": "Пруд",
-            "蛙": "Лягушка"
+            "木": "Дерево",
+            "休": "Отдых",
+            "林": "Роща",
+            "森": "Лес",
+            "本": "Книга"
         };
 
         function createCards() {
@@ -98,6 +105,18 @@
             if (draggedKanji === correctKanji) {
                 event.target.classList.add("hidden");
                 document.querySelector(`.kanji-card:contains('${draggedKanji}')`).classList.add("hidden");
+                triggerFireworks(event.clientX, event.clientY);
+            }
+        }
+
+        function triggerFireworks(x, y) {
+            for (let i = 0; i < 10; i++) {
+                const firework = document.createElement("div");
+                firework.className = "firework";
+                firework.style.left = `${x + (Math.random() * 50 - 25)}px`;
+                firework.style.top = `${y + (Math.random() * 50 - 25)}px`;
+                document.body.appendChild(firework);
+                setTimeout(() => firework.remove(), 800);
             }
         }
 
