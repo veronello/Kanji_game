@@ -11,6 +11,7 @@
             background: linear-gradient(to right, #ffdde1, #ee9ca7, #c89ec4, #a29bfe);
             color: #333;
             overflow: hidden;
+            position: relative;
         }
         h1 {
             color: #6a0572;
@@ -89,8 +90,9 @@
                 const meaningCard = document.createElement("div");
                 meaningCard.className = "meaning-card";
                 meaningCard.textContent = meaning;
+                meaningCard.dataset.kanji = kanji;
                 meaningCard.ondragover = (event) => allowDrop(event);
-                meaningCard.ondrop = (event) => drop(event, kanji);
+                meaningCard.ondrop = (event) => drop(event, meaningCard);
                 meaningContainer.appendChild(meaningCard);
             });
         }
@@ -103,12 +105,17 @@
             event.preventDefault();
         }
 
-        function drop(event, correctKanji) {
+        function drop(event, meaningCard) {
             event.preventDefault();
             const draggedKanji = event.dataTransfer.getData("text");
-            if (draggedKanji === correctKanji) {
-                event.target.classList.add("hidden");
-                document.querySelector(`.kanji-card:contains('${draggedKanji}')`).classList.add("hidden");
+            if (draggedKanji === meaningCard.dataset.kanji) {
+                meaningCard.classList.add("hidden");
+                const kanjiCards = document.querySelectorAll(".kanji-card");
+                kanjiCards.forEach(card => {
+                    if (card.textContent === draggedKanji) {
+                        card.classList.add("hidden");
+                    }
+                });
                 triggerSnowfall(event.clientX, event.clientY);
             }
         }
