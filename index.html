@@ -43,13 +43,13 @@
         }
         @keyframes snowfall {
             0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 0; transform: translateY(100px); }
         }
         .snowflake {
             position: absolute;
-            font-size: 20px;
+            font-size: 24px;
             color: #ffffff;
-            animation: snowfall 1s ease-out;
+            animation: snowfall 2s ease-out;
         }
     </style>
 </head>
@@ -69,8 +69,10 @@
             "森": "Лес",
             "雨": "Дождь",
             "田": "Рисовое поле",
+            "雪": "Снег",
             "雷": "Гром",
-             };
+            "電": "Электричество"
+        };
 
         function createCards() {
             const kanjiContainer = document.getElementById("kanji-container");
@@ -118,14 +120,14 @@
         }
 
         function triggerSnowfall(x, y) {
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 20; i++) { // Increased snowflakes
                 const snowflake = document.createElement("div");
                 snowflake.className = "snowflake";
                 snowflake.textContent = "❄";
-                snowflake.style.left = `${x + (Math.random() * 50 - 25)}px`;
-                snowflake.style.top = `${y + (Math.random() * 50 - 25)}px`;
+                snowflake.style.left = `${x + (Math.random() * 80 - 40)}px`;
+                snowflake.style.top = `${y + (Math.random() * 80 - 40)}px`;
                 document.body.appendChild(snowflake);
-                setTimeout(() => snowflake.remove(), 1000);
+                setTimeout(() => snowflake.remove(), 2000);
             }
         }
 
