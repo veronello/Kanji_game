@@ -28,6 +28,7 @@
             box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: transform 0.2s, background-color 0.3s;
+            user-select: none;
         }
         .kanji-card:hover, .meaning-card:hover {
             transform: scale(1.1);
@@ -90,7 +91,7 @@
                 kanjiCard.textContent = kanji;
                 kanjiCard.draggable = true;
                 kanjiCard.ondragstart = (event) => drag(event, kanji);
-                kanjiCard.onclick = () => selectCard(kanjiCard, kanji);
+                kanjiCard.addEventListener("click", () => selectCard(kanjiCard, kanji));
                 kanjiContainer.appendChild(kanjiCard);
             });
             
@@ -103,14 +104,14 @@
                 meaningCard.dataset.kanji = kanji;
                 meaningCard.ondragover = (event) => allowDrop(event);
                 meaningCard.ondrop = (event) => drop(event, meaningCard);
-                meaningCard.onclick = () => matchCard(meaningCard);
+                meaningCard.addEventListener("click", () => matchCard(meaningCard));
                 meaningContainer.appendChild(meaningCard);
             });
         }
 
         function selectCard(card, kanji) {
             if (selectedCard) {
-                selectedCard.classList.remove("selected");
+                selectedCard.card.classList.remove("selected");
             }
             selectedCard = { card, kanji };
             card.classList.add("selected");
