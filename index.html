@@ -10,8 +10,10 @@
             text-align: center;
             background: #4b0082;
             color: #f8f8ff;
-            overflow: hidden;
             position: relative;
+            min-height: 100vh;
+            overflow-y: auto; /* Enables vertical scrolling */
+            overflow-x: hidden;
         }
         h1 {
             color: #00ffff;
@@ -42,6 +44,7 @@
             flex-wrap: wrap;
             justify-content: center;
             margin-top: 20px;
+            padding-bottom: 100px; /* Prevents cutoff on mobile */
         }
         .hidden {
             visibility: hidden;
