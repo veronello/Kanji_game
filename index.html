@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background: #4b0082;
-            color: #008000;
+            color: #f8f8ff;
             overflow: hidden;
             position: relative;
         }
@@ -102,10 +102,8 @@
             const kanjiContainer = document.getElementById("kanji-container");
             const meaningContainer = document.getElementById("meaning-container");
             
-            let kanjiArray = Object.entries(kanjiDict);
-            shuffleArray(kanjiArray);
-
-            kanjiArray.forEach(([kanji, meaning]) => {
+            let kanjiArray = Object.keys(kanjiDict);
+            kanjiArray.forEach(kanji => {
                 const kanjiCard = document.createElement("div");
                 kanjiCard.className = "kanji-card";
                 kanjiCard.textContent = kanji;
@@ -114,8 +112,9 @@
                 kanjiContainer.appendChild(kanjiCard);
             });
             
-            shuffleArray(kanjiArray);
-            kanjiArray.forEach(([kanji, meaning]) => {
+            let meaningsArray = Object.entries(kanjiDict);
+            shuffleArray(meaningsArray);
+            meaningsArray.forEach(([kanji, meaning]) => {
                 const meaningCard = document.createElement("div");
                 meaningCard.className = "meaning-card";
                 meaningCard.textContent = meaning;
@@ -139,8 +138,7 @@
             const draggedKanji = event.dataTransfer.getData("text");
             if (draggedKanji === meaningCard.dataset.kanji) {
                 meaningCard.classList.add("hidden");
-                const kanjiCards = document.querySelectorAll(".kanji-card");
-                kanjiCards.forEach(card => {
+                document.querySelectorAll(".kanji-card").forEach(card => {
                     if (card.textContent === draggedKanji) {
                         card.classList.add("hidden");
                     }
