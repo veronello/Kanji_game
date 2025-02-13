@@ -14,14 +14,14 @@
             position: relative;
         }
         h1 {
-            color: #ffcc00;
+            color: #00ffff;
         }
         .kanji-card, .meaning-card {
             font-size: 50px;
             font-weight: bold;
             padding: 20px;
-            background-color: #8a2be2;
-            color: #ffdd55;
+            background-color: #663399;
+            color: #f0f8ff;
             display: inline-block;
             border-radius: 10px;
             margin: 20px;
@@ -31,7 +31,7 @@
         }
         .kanji-card:hover, .meaning-card:hover {
             transform: scale(1.1);
-            background-color: #9932cc;
+            background-color: #5a2d8f;
         }
         .container {
             display: flex;
@@ -111,6 +111,36 @@
                 meaningCard.ondrop = (event) => drop(event, meaningCard);
                 meaningContainer.appendChild(meaningCard);
             });
+        }
+
+        function drag(event, kanji) {
+            event.dataTransfer.setData("text", kanji);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event, meaningCard) {
+            event.preventDefault();
+            const draggedKanji = event.dataTransfer.getData("text");
+            if (draggedKanji === meaningCard.dataset.kanji) {
+                meaningCard.classList.add("hidden");
+                const kanjiCards = document.querySelectorAll(".kanji-card");
+                kanjiCards.forEach(card => {
+                    if (card.textContent === draggedKanji) {
+                        card.classList.add("hidden");
+                    }
+                });
+                matchedPairs++;
+                checkWin();
+            }
+        }
+
+        function checkWin() {
+            if (matchedPairs === Object.keys(kanjiDict).length) {
+                document.getElementById("win-message").style.display = "block";
+            }
         }
 
         createCards();
