@@ -88,6 +88,8 @@
                 const kanjiCard = document.createElement("div");
                 kanjiCard.className = "kanji-card";
                 kanjiCard.textContent = kanji;
+                kanjiCard.draggable = true;
+                kanjiCard.ondragstart = (event) => drag(event, kanji);
                 kanjiCard.onclick = () => selectCard(kanjiCard, kanji);
                 kanjiContainer.appendChild(kanjiCard);
             });
@@ -99,6 +101,8 @@
                 meaningCard.className = "meaning-card";
                 meaningCard.textContent = meaning;
                 meaningCard.dataset.kanji = kanji;
+                meaningCard.ondragover = (event) => allowDrop(event);
+                meaningCard.ondrop = (event) => drop(event, meaningCard);
                 meaningCard.onclick = () => matchCard(meaningCard);
                 meaningContainer.appendChild(meaningCard);
             });
@@ -117,6 +121,29 @@
                 meaningCard.classList.add("hidden");
                 selectedCard.card.classList.add("hidden");
                 selectedCard = null;
+                matchedPairs++;
+                checkWin();
+            }
+        }
+
+        function drag(event, kanji) {
+            event.dataTransfer.setData("text", kanji);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event, meaningCard) {
+            event.preventDefault();
+            const draggedKanji = event.dataTransfer.getData("text");
+            if (draggedKanji === meaningCard.dataset.kanji) {
+                meaningCard.classList.add("hidden");
+                document.querySelectorAll(".kanji-card").forEach(card => {
+                    if (card.textContent === draggedKanji) {
+                        card.classList.add("hidden");
+                    }
+                });
                 matchedPairs++;
                 checkWin();
             }
