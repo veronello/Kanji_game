@@ -26,12 +26,15 @@
             border-radius: 10px;
             margin: 20px;
             box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2);
-            cursor: grab;
+            cursor: pointer;
             transition: transform 0.2s, background-color 0.3s;
         }
         .kanji-card:hover, .meaning-card:hover {
             transform: scale(1.1);
             background-color: #5a2d8f;
+        }
+        .selected {
+            background-color: #00ff7f !important;
         }
         .container {
             display: flex;
@@ -41,20 +44,6 @@
         }
         .hidden {
             visibility: hidden;
-        }
-        @keyframes snowfall {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(100px); }
-        }
-        .snowflake {
-            position: absolute;
-            font-size: 24px;
-            color: #00ffff;
-            animation: snowfall 2s ease-out;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
         }
         .win-message {
             position: fixed;
@@ -89,59 +78,45 @@
             "雷": "Гром"
         };
         let matchedPairs = 0;
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+        let selectedCard = null;
 
         function createCards() {
             const kanjiContainer = document.getElementById("kanji-container");
             const meaningContainer = document.getElementById("meaning-container");
             
-            let kanjiArray = Object.keys(kanjiDict);
-            kanjiArray.forEach(kanji => {
+            Object.keys(kanjiDict).forEach(kanji => {
                 const kanjiCard = document.createElement("div");
                 kanjiCard.className = "kanji-card";
                 kanjiCard.textContent = kanji;
-                kanjiCard.draggable = true;
-                kanjiCard.ondragstart = (event) => drag(event, kanji);
+                kanjiCard.onclick = () => selectCard(kanjiCard, kanji);
                 kanjiContainer.appendChild(kanjiCard);
             });
             
             let meaningsArray = Object.entries(kanjiDict);
-            shuffleArray(meaningsArray);
+            meaningsArray.sort(() => Math.random() - 0.5);
             meaningsArray.forEach(([kanji, meaning]) => {
                 const meaningCard = document.createElement("div");
                 meaningCard.className = "meaning-card";
                 meaningCard.textContent = meaning;
                 meaningCard.dataset.kanji = kanji;
-                meaningCard.ondragover = (event) => allowDrop(event);
-                meaningCard.ondrop = (event) => drop(event, meaningCard);
+                meaningCard.onclick = () => matchCard(meaningCard);
                 meaningContainer.appendChild(meaningCard);
             });
         }
 
-        function drag(event, kanji) {
-            event.dataTransfer.setData("text", kanji);
+        function selectCard(card, kanji) {
+            if (selectedCard) {
+                selectedCard.classList.remove("selected");
+            }
+            selectedCard = { card, kanji };
+            card.classList.add("selected");
         }
 
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drop(event, meaningCard) {
-            event.preventDefault();
-            const draggedKanji = event.dataTransfer.getData("text");
-            if (draggedKanji === meaningCard.dataset.kanji) {
+        function matchCard(meaningCard) {
+            if (selectedCard && selectedCard.kanji === meaningCard.dataset.kanji) {
                 meaningCard.classList.add("hidden");
-                document.querySelectorAll(".kanji-card").forEach(card => {
-                    if (card.textContent === draggedKanji) {
-                        card.classList.add("hidden");
-                    }
-                });
+                selectedCard.card.classList.add("hidden");
+                selectedCard = null;
                 matchedPairs++;
                 checkWin();
             }
