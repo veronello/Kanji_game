@@ -91,18 +91,31 @@
         };
         let matchedPairs = 0;
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         function createCards() {
             const kanjiContainer = document.getElementById("kanji-container");
             const meaningContainer = document.getElementById("meaning-container");
             
-            Object.entries(kanjiDict).forEach(([kanji, meaning]) => {
+            let kanjiArray = Object.entries(kanjiDict);
+            shuffleArray(kanjiArray);
+
+            kanjiArray.forEach(([kanji, meaning]) => {
                 const kanjiCard = document.createElement("div");
                 kanjiCard.className = "kanji-card";
                 kanjiCard.textContent = kanji;
                 kanjiCard.draggable = true;
                 kanjiCard.ondragstart = (event) => drag(event, kanji);
                 kanjiContainer.appendChild(kanjiCard);
-
+            });
+            
+            shuffleArray(kanjiArray);
+            kanjiArray.forEach(([kanji, meaning]) => {
                 const meaningCard = document.createElement("div");
                 meaningCard.className = "meaning-card";
                 meaningCard.textContent = meaning;
