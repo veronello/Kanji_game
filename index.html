@@ -51,6 +51,22 @@
             color: #ffffff;
             animation: snowfall 2s ease-out;
         }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            font-weight: bold;
+            color: #ff0055;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 2s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -59,6 +75,7 @@
 
     <div class="container" id="kanji-container"></div>
     <div class="container" id="meaning-container"></div>
+    <div id="win-message" class="win-message">YOU WON! 🎉</div>
 
     <script>
         const kanjiDict = {
@@ -71,11 +88,12 @@
             "田": "Поле",
             "雷": "Гром"
         };
+        let matchedPairs = 0;
 
         function createCards() {
             const kanjiContainer = document.getElementById("kanji-container");
             const meaningContainer = document.getElementById("meaning-container");
-
+            
             Object.entries(kanjiDict).forEach(([kanji, meaning]) => {
                 const kanjiCard = document.createElement("div");
                 kanjiCard.className = "kanji-card";
@@ -114,11 +132,13 @@
                     }
                 });
                 triggerSnowfall(event.clientX, event.clientY);
+                matchedPairs++;
+                checkWin();
             }
         }
 
         function triggerSnowfall(x, y) {
-            for (let i = 0; i < 50; i++) { // Increased snowflakes
+            for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement("div");
                 snowflake.className = "snowflake";
                 snowflake.textContent = "❄";
@@ -126,6 +146,12 @@
                 snowflake.style.top = `${y + (Math.random() * 80 - 40)}px`;
                 document.body.appendChild(snowflake);
                 setTimeout(() => snowflake.remove(), 2000);
+            }
+        }
+
+        function checkWin() {
+            if (matchedPairs === Object.keys(kanjiDict).length) {
+                document.getElementById("win-message").style.display = "block";
             }
         }
 
